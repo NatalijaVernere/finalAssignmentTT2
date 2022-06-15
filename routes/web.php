@@ -26,42 +26,32 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 
+
 Auth::routes();
+Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+
 Route::redirect('/', 'login');
 Route::resource('recipe', RecipeController::class, ['except'=> ['update']]);
 
 Route::resource('comment', CommentController::class, ['except'=> ['store']]);
 
-Route::get('/recipes/filterDescName', function () { //ja šeit vienkārši ievada '/filterDesc' (un nomaina izsaukumu tādu pašu), tad strādā. weird
-    //dd('hello route filterDesc');
-    $recipes = Recipe::orderBy('name', 'DESC')->get();
-    //dd($recipes);
-    return view('recipes', compact('recipes'));
-})->name('filterDesc.name');
+Route::get('/recipes/filterDescName', [RecipeController::class, 'filter'])
+    ->defaults('filterColumn', 'name')
+    ->defaults('filterType', 'DESC');
 
-Route::get('/recipes/filterAscName', function () {
-    //dd('hello route filterDesc');
-    $recipes = Recipe::orderBy('name', 'ASC')->get();
-    //dd($recipes);
-    return view('recipes', compact('recipes'));
-})->name('filterAsc.name');
+Route::get('/recipes/filterAscName', [RecipeController::class, 'filter'])
+    ->defaults('filterColumn', 'name')
+    ->defaults('filterType', 'ASC');
 
-//recipes/filterAsc/name
-//recipes/filterAsc/cookingTime'
+Route::get('/recipes/filterAscCookingTime', [RecipeController::class, 'filter'])
+    ->defaults('filterColumn', 'cooking_time')
+    ->defaults('filterType', 'DESC');
 
-Route::get('/recipes/filterAscCookingTime', function () {
-    //dd('hello route filterDesc');
-    $recipes = Recipe::orderBy('cooking_time', 'ASC')->get();
-    //dd($recipes);
-    return view('recipes', compact('recipes'));
-})->name('filterAsc.cookingTime');
+Route::get('/recipes/filterDescCookingTime', [RecipeController::class, 'filter'])
+    ->defaults('filterColumn', 'cooking_time')
+    ->defaults('filterType', 'ASC');
 
-Route::get('/recipes/filterDescCookingTime', function () {
-    //dd('hello route filterDesc');
-    $recipes = Recipe::orderBy('cooking_time', 'DESC')->get();
-    //dd($recipes);
-    return view('recipes', compact('recipes'));
-})->name('filterDesc.cookingTime');
 
 Route::get('/recipe/{id}/', [RecipeController::class, 'show']);
 Route::get('/recipe/create', [RecipeController::class, 'create']);

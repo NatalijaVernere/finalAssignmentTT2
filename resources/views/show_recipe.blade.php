@@ -6,8 +6,14 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{{ url('css/app.css') }}">
 </head>
 <body>
+
+    @include('includes.nav_bar')
+
+    <hr>
+
     <p> <input type="button" value="back" onclick="goBack()"> </p>
     <!--Recipe info:-->
     <h1>{{ $recipe->name }}</h1>
@@ -67,10 +73,12 @@
                 <h4>Rating: {{ $comment->rating }}</h4>
                 <p>{{ $comment->content }}</p>
                 <p>{{ $comment->username }}</p>
-                <form method="POST" action="{{action([App\Http\Controllers\CommentController::class, 'destroy'], $comment->id)}}">
-                    @csrf @method('DELETE')
-                    <input class="delete-btn" type="submit" value="delete">
-                </form>
+                @if(Auth::user()->id == $comment->user_id || Auth::user()->role == 'admin')
+                    <form method="POST" action="{{action([App\Http\Controllers\CommentController::class, 'destroy'], $comment->id)}}">
+                        @csrf @method('DELETE')
+                        <input class="delete-btn" type="submit" value="delete">
+                    </form>
+                @endif
             </div>
         @endforeach
     @endif

@@ -10,26 +10,9 @@
 </head>
 <body>
 
-@extends('layouts.app')
+@include('includes.nav_bar')
 
-@section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-                        <p>You are logged in as {{ Auth::user()->email }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
+<hr> <!-- delete later ?! -->
 
 
 
@@ -76,6 +59,7 @@
                 <td>
                     <input type="button" value="show" onclick="showRecipeInfo({{ $recipe->id }})">
                 <td>
+                @if(Auth::user()->id == $recipe->user_id || Auth::user()->role == 'admin')
                 <td>
                     <form method="POST" action="{{action([App\Http\Controllers\RecipeController::class, 'destroy'], $recipe->id)}}">@csrf @method('DELETE')
                         <input class="delete-btn" type="submit" value="delete">
@@ -86,6 +70,7 @@
                         <input type="submit" value="update" onclick="editRecipe({{$recipe->id}})">@csrf @method('GET')
                     </form>
                 </td>
+                @endif
             </tr>
         @endforeach
     </table>

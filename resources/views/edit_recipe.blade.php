@@ -4,6 +4,7 @@
     <title>Update country</title>
 </head>
 <body>
+<p> <input type="button" value="back" onclick="goBack()"> </p>
 We will update a recipe with id <b>{{$recipe->id}}</b>:
 <form method="POST" action="{{
 action([App\Http\Controllers\RecipeController::class, 'update'], $recipe->id) }}">
@@ -11,19 +12,19 @@ action([App\Http\Controllers\RecipeController::class, 'update'], $recipe->id) }}
     <input type="hidden" name="recipe_id" value="{{ $recipe->id }}">
 
     <label for="name">Recipe Name: </label><br>
-    <input type="text" name="name" id="name"><br>
+    <input type="text" name="name" id="name" value="{{ $recipe->name }}"><br>
     <p class="err-msg">@error('name') {{$message}} @enderror</p>
 
     <label for="short_description">Short recipe description: </label><br>
-    <input type="text" name="short_description" id="short_description"><br>
+    <input type="text" name="short_description" id="short_description" value="{{ $recipe->short_description }}"><br>
     <p class="err-msg">@error('short_description') {{$message}} @enderror</p>
 
     <label for="description">Extended recipe description: </label><br>
-    <input type="text" name="description" id="description"><br>
+    <input type="text" name="description" id="description" value="{{ $recipe->description }}"><br>
     <p class="err-msg">@error('description') {{$message}} @enderror</p>
 
     <label for="cooking_time">Cooking time (minutes): </label><br>
-    <input type="text" name="cooking_time" id="cooking_time"><br>
+    <input type="text" name="cooking_time" id="cooking_time" value="{{ $recipe->cooking_time }}"><br>
     <p class="err-msg">@error('cooking_time') {{$message}} @enderror</p><br>
 
 
@@ -57,6 +58,10 @@ action([App\Http\Controllers\RecipeController::class, 'update'], $recipe->id) }}
     <input type="submit" value="add" onclick="addProductIds({{ $recipe->id }})">
 </form>
 <script>
+    function goBack(){
+        window.location.href = "/";
+    }
+
     function updateRecipe(RecipeID) {
         window.location.href="/recipe/update/"+RecipeID;
     }
