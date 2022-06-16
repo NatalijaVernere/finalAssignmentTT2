@@ -11,6 +11,9 @@
         <a href="#">Recipes</a><br>
         <!--<a href="#">My recipes</a>-->
         <a href="#">Add new recipes</a>
+        @if(Auth::user()->role == 'admin')
+            <p> <input type="button" value="See users" onclick="seeUsers()"> </p>
+        @endif
     </div>
 
     <div class="logout-box">

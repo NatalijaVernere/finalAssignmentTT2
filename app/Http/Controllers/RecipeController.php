@@ -217,6 +217,7 @@ class RecipeController extends Controller
         }
         Comment::where('recipe_id', $id)->delete();
         RecipeProduct::where('recipe_id', $id)->delete();
+
         $recipe->delete();
         return redirect('recipe');
     }

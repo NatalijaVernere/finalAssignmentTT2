@@ -81,12 +81,10 @@
         @endif
         <p> <input type="button" value="New Recipe" onclick="newRecipe()"> </p> <br>
         @if(Auth::user()->role == 'admin')
-            <p> <input type="button" value="See users" onclick="seeUsers()"> </p>
+            <!--<p> <input type="button" value="See users" onclick="seeUsers()"> </p>-->
         @endif
     </div>
 </div>
-
-
 <script>
     function editRecipe(recipeID){
         window.location.href = "recipe/edit/"+recipeID;
