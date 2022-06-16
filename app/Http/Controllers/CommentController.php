@@ -94,9 +94,14 @@ class CommentController extends Controller
      */
     public function destroy($id) //comment id != recipe id
     {
-        $recipe_id = Comment::where('id', $id)->select('comments.recipe_id')->first();
+        $comment = Comment::findOrFail($id);
 
-        Comment::where('id', $id)->delete();
-        return redirect('recipe/' . $recipe_id->recipe_id);
+        if($comment->user_id != Auth::user()->id && Auth::user()->role != 'admin'){
+            abort('403');
+            dd('false'); //
+        }
+        $comment->delete();
+
+        return redirect('recipe/' . $comment->recipe_id);
     }
 }

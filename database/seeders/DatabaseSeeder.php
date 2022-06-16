@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 use App\Models\Product;
 use App\Models\User;
@@ -34,21 +35,21 @@ class DatabaseSeeder extends Seeder
         $user = User::create([
             'username' => 'NatalyVerner',
             'email' => 'natashavernere@gmail.com',
-            'password' => 'mamaamakriminal12369',
+            'password' => Hash::make('mamaamakriminal12369'),
             'role' => 'admin',
         ]);
 
         $user = User::create([
             'username' => 'RolandsK',
             'email' => 'rolands.kungs@gmail.com',
-            'password' => 'BMWloverx5@',
+            'password' => Hash::make('BMWloverx5@'),
             'role' => 'admin',
         ]);
 
         $user = User::create([
             'username' => 'SabineVanaga',
             'email' => 'natalyverner@inbox.lv',
-            'password' => 'yurtavpitere9',
+            'password' => Hash::make('yurtavpitere9'),
             'role' => 'user',
         ]);
 

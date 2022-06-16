@@ -22,6 +22,7 @@ class RecipeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
     }
 
     public function index()
@@ -95,11 +96,9 @@ class RecipeController extends Controller
         $recipe = Recipe::where('recipes.id', '=', $id)->
         select('users.username', 'recipes.id', 'recipes.name', 'recipes.short_description', 'recipes.description', 'recipes.cooking_time', 'recipes.created_at')
         ->join('users', 'users.id', '=', 'recipes.user_id')->first();
-        //dd($recipe);
-
 
         $comments = Comment::where('recipe_id', '=', $id)->
-        select('users.username', 'comments.id', 'comments.rating', 'comments.content', 'comments.created_at')->
+        select('users.username', 'comments.id', 'comments.user_id', 'comments.rating', 'comments.content', 'comments.created_at')->
             join('users', 'users.id', '=', 'comments.user_id')
             ->orderBy('comments.created_at', 'desc')
             ->get();
@@ -130,7 +129,6 @@ class RecipeController extends Controller
      */
 
     public function filterNameDesc() {
-        //dd('hello');
         $recipes = Recipe::orderBy('name', 'DESC')->get();
         dd($recipes);
         return view('recipes', compact('recipes'));
@@ -167,9 +165,21 @@ class RecipeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //$recipe = new Recipe();
+        $data = request()->validate([
+            'name' => 'required|max:255', //unique:recipes|
+            'short_description' => 'required|max:255',
+            'description' => 'required|max:255',
+            'cooking_time' => 'required|min:0.01|max:1000|numeric',
+            'products' => 'required'
+        ]);
+
+
         $recipe = Recipe::findOrFail($id);
-        $recipe->user_id = Auth::id(); //!!! Šeit vajag nomainīt. Šis ir bruteforce. Kad būs login, tad varēs (varbūt ātrāk)
+        if($recipe->user_id != Auth::user()->id && Auth::user()->role != 'admin'){
+            abort('403');
+            dd('false'); //
+        }
+        //$recipe->user_id = Auth::id();
         $recipe->name = $request->name;
         $recipe->short_description = $request->short_description;
         $recipe->description = $request->description;
@@ -186,7 +196,6 @@ class RecipeController extends Controller
 
         for ($i = 0; $i < count($arrOfIds); $i++) {
             $product_id = intval($arrOfIds[$i]);
-            //dd($product_id);
             $product = Product::where('id', $product_id)->first();
             $recipe->products()->attach($product);
         }
@@ -202,8 +211,20 @@ class RecipeController extends Controller
      */
     public function destroy($id)
     {
+        $recipe = Recipe::findOrFail($id);
+        if($recipe->user_id != Auth::user()->id && Auth::user()->role != 'admin'){
+            abort('403');
+        }
         Comment::where('recipe_id', $id)->delete();
-        Recipe::findOrFail($id)->delete();
+        RecipeProduct::where('recipe_id', $id)->delete();
+        $recipe->delete();
         return redirect('recipe');
+    }
+
+    public function filter($filterColumn, $filterType){
+        //dd($filterType);
+        //$recipes = Recipe::orderBy('name', 'DESC')->get();
+        $recipes = Recipe::orderBy($filterColumn, $filterType)->get();
+        return view('recipes', compact('recipes'));
     }
 }
