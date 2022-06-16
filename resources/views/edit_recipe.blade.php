@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Update country</title>
+    <title>Edit recipe</title>
 </head>
 <body>
 <p> <input type="button" value="back" onclick="goBack()"> </p>

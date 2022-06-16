@@ -22,6 +22,7 @@ class RecipeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
     }
 
     public function index()
@@ -213,9 +214,10 @@ class RecipeController extends Controller
         $recipe = Recipe::findOrFail($id);
         if($recipe->user_id != Auth::user()->id && Auth::user()->role != 'admin'){
             abort('403');
-            dd('false'); //
         }
         Comment::where('recipe_id', $id)->delete();
+        RecipeProduct::where('recipe_id', $id)->delete();
+
         $recipe->delete();
         return redirect('recipe');
     }

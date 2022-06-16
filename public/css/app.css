@@ -1,1 +1,47 @@
+body{
+    background-color: #EDEDED;
+    margin: 0;
+    padding: 0;
 
+}
+
+.app{
+    display: flex;
+    font-family: 'Inter', 'Times New Roman';
+}
+
+.nav-bar{
+    box-sizing: border-box;
+    padding: 1.5em 1.5em;
+    background-color: #B9D3AC;
+    width: 300px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.nav-bar a{
+    text-decoration: none;
+    color: black;
+}
+
+.nav-bar .logged-in{
+    margin: 0;
+}
+
+.nav-bar .page-links a{
+    display: inline-block;
+    margin-bottom: 30px;
+    font-size: 700;
+}
+
+.nav-bar .logout-box{
+    text-align: center;
+}
+
+.nav-bar .logout-btn{
+    padding: 1em 3em;
+    background: white;
+    border-radius: 10px;
+}

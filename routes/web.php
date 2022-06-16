@@ -36,6 +36,8 @@ Route::resource('recipe', RecipeController::class, ['except'=> ['update']]);
 
 Route::resource('comment', CommentController::class, ['except'=> ['store']]);
 
+Route::resource('users', UserController::class, ['except'=> ['update', 'edit']]);
+
 Route::get('/recipes/filterDescName', [RecipeController::class, 'filter'])
     ->defaults('filterColumn', 'name')
     ->defaults('filterType', 'DESC');
@@ -62,7 +64,7 @@ Route::post('recipe/update/{id}', [RecipeController::class, 'update']);
 
 Route::post('recipe/{id}/comment/store', [CommentController::class, 'store']);
 
-Route::post('user', [UserController::class, 'show']);
-
-
-
+//Route::post('user', [UserController::class, 'show']);
+Route::get('users/edit/{id}', [UserController::class, 'edit']);
+Route::post('users/update/{id}', [UserController::class, 'update']);
+Route::post('/users/filter', [UserController::class, 'showMultiple']);
