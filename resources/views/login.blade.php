@@ -14,8 +14,7 @@
 
 <h1>Login</h1>
 
-<form method="POST"
-      action="{{action([App\Http\Controllers\UserController::class, 'show']) }}">
+<form method="POST" action="{{action([App\Http\Controllers\UserController::class, 'show']) }}">
     @csrf
 
     <label for="username">Username: </label>
@@ -23,7 +22,6 @@
 
     <label for="password">Password: </label>
     <input type="text" name="password" id="password">
-
 
     <input type="submit" value="add" onclick="storeComment({{$recipe->id}})">
 </form>
