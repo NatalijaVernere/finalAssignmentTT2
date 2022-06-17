@@ -68,3 +68,8 @@ Route::post('recipe/{id}/comment/store', [CommentController::class, 'store']);
 Route::get('users/edit/{id}', [UserController::class, 'edit']);
 Route::post('users/update/{id}', [UserController::class, 'update']);
 Route::post('/users/filter', [UserController::class, 'showMultiple']);
+Route::get('/myrecipes', [RecipeController::class, 'myRecipes']);
+
+
+
+

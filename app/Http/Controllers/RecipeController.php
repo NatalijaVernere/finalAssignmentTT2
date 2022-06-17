@@ -51,8 +51,8 @@ class RecipeController extends Controller
     public function store(Request $request)
     {
         $data = request()->validate([
-            'name' => 'unique:recipes|required|max:255',
-            'short_description' => 'required|max:255',
+            'name' => 'unique:recipes|required|max:30',
+            'short_description' => 'required|max:100',
             'description' => 'required|max:255',
             'cooking_time' => 'required|min:0.01|max:1000|numeric',
             'products' => 'required'
@@ -124,6 +124,19 @@ class RecipeController extends Controller
     }
 
     /**
+     * @return void
+     * Returns recipes than match search
+     */
+
+    public function myRecipes(){
+        $user = Auth::user();
+        //dd($user->id);
+        $recipes = Recipe::where('user_id', $user->id)->get();
+        //dd($recipes);
+        return view('recipes', compact('recipes'));
+    }
+
+    /**
      * @return \Illuminate\Http\Response
      * Returns ordered recipes than match order by
      */
@@ -143,6 +156,9 @@ class RecipeController extends Controller
     public function edit($id)
     {
         $recipe = Recipe::findOrFail($id);
+        if($recipe->user_id != Auth::user()->id && Auth::user()->role != 'admin'){
+            abort('403');
+        }
         $products_checked = Recipe::findOrFail($id)->products()->orderBy('isAllergic', 'desc', 'type', 'asc')->get();
         $products = Product::all();
 
@@ -177,7 +193,6 @@ class RecipeController extends Controller
         $recipe = Recipe::findOrFail($id);
         if($recipe->user_id != Auth::user()->id && Auth::user()->role != 'admin'){
             abort('403');
-            dd('false'); //
         }
         //$recipe->user_id = Auth::id();
         $recipe->name = $request->name;
@@ -217,7 +232,6 @@ class RecipeController extends Controller
         }
         Comment::where('recipe_id', $id)->delete();
         RecipeProduct::where('recipe_id', $id)->delete();
-
         $recipe->delete();
         return redirect('recipe');
     }
